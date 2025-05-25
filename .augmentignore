@@ -1,0 +1,60 @@
+# Augment Context Engine Ignore File for TemplateMaker Project
+# This file tells Augment's context engine which files/directories to exclude
+# to focus on relevant source code rather than dependencies and binary files
+
+# Large dependency directories
+X2WOTCCommunityHighlander/
+Temp/
+BuildCache/
+
+# Documentation (focus on code context)
+Documentation/
+
+# Binary content files
+Content/
+*.upk
+*.uasset
+*.umap
+
+# Compiled files
+Script/
+*.u
+*.dll
+*.exe
+
+# Build artifacts and temporary files
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vs/
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+
+# Specific files that are noise for context
+ModPreview.jpg
+PublishedFileId.ID
+ReadMe.txt

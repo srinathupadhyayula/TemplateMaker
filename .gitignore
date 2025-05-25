@@ -1,0 +1,29 @@
+# Ignore Temp directory
+Temp/
+BuildCache/
+
+# Common XCOM 2 mod files to ignore
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

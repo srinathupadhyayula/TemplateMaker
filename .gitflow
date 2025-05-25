@@ -1,0 +1,9 @@
+# GitFlow Branching Strategy for TemplateMaker (PR-Based)
+
+## Branch Structure
+
+- main: Production-ready code. Only merge from develop or hotfix branches via Pull Requests.
+- develop: Integration branch for features. All feature branches are created from and merged back to this branch via Pull Requests.
+- feature/*: Feature branches for new functionality. Created from develop and merged back to develop via Pull Requests.
+- release/*: Release preparation branches. Created from develop and merged to both main and develop via Pull Requests.
+- hotfix/*: Hotfix branches for urgent production fixes. Created from main and merged to both main and develop via Pull Requests.

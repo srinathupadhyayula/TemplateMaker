@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Guid>d8a1a3c0-5f9e-4f41-a5c5-8b9c9d7f8e9a</Guid>
+    <Name>TemplateMaker</Name>
+    <Description>A comprehensive template management system for XCOM 2 mods, combining the functionality of Weapon Skin Replacer (WSR) and TemplateMaster with enhanced support for character template creation/modification through configuration files.</Description>
+    <SteamPublishID>0</SteamPublishID>
+    <AssemblyName>TemplateMaker</AssemblyName>
+    <RootNamespace>TemplateMaker</RootNamespace>
+    <ProjectGuid>{d8a1a3c0-5f9e-4f41-a5c5-8b9c9d7f8e9a}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Config\" />
+    <Folder Include="Config\Base\" />
+    <Folder Include="Config\TemplateMaker\" />
+    <Folder Include="Content\" />
+    <Folder Include="Documentation\" />
+    <Folder Include="Localization\" />
+    <Folder Include="Src\" />
+    <Folder Include="Src\TemplateMaker\" />
+    <Folder Include="Src\TemplateMaker\Classes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\TemplateMaker\XComTemplateMaker.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComTemplateCreator.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComTemplateEditor.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComWeaponSkinReplacer.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModPreview.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ReadMe.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TemplateMaker.XComMod">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Src\TemplateMaker\Classes\TM_ConfigManager.uc">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Src\TemplateMaker\Classes\TM_Logger.uc">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Src\TemplateMaker\Classes\X2DownloadableContentInfo_TemplateMaker.uc">
+      <SubType>Content</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+</Project>

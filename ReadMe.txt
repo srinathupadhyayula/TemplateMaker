@@ -1,0 +1,5 @@
+TemplateMaker
+
+A comprehensive template management system for XCOM 2 mods, combining the functionality of Weapon Skin Replacer (WSR) and TemplateMaster with enhanced support for character template creation/modification through configuration files.
+
+See README.md for more information.
