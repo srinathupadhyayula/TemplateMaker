@@ -2,6 +2,9 @@
 Temp/
 BuildCache/
 
+# Ignore implementation plan (local development reference only)
+Documentation/Plan.md
+
 # Common XCOM 2 mod files to ignore
 *.swp
 *.swo
