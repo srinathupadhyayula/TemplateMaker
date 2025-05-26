@@ -90,11 +90,9 @@ static function TestResult TestConfigurationSystem()
     Result.TestName = "Configuration System";
     StartTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
 
-    // Test configuration accessors - using simple conditional logic
-    if (class'TM_ConfigManager'.static.IsUnifiedProcessingEnabled() ||
-        !class'TM_ConfigManager'.static.IsUnifiedProcessingEnabled())
+    // Test if configuration system is responding by attempting to access a value
+    if (class'TM_ConfigManager'.static.IsInitialized())
     {
-        // Configuration system is responding
         Result.bPassed = true;
         Result.Details = "Configuration system accessible and responsive";
     }
@@ -108,6 +106,8 @@ static function TestResult TestConfigurationSystem()
     if (!class'TM_ConfigManager'.static.IsConfigurationValid())
     {
         Result.Details $= " (Configuration validation found issues)";
+        Result.bPassed = false;
+        Result.ErrorMessage = "Configuration validation failed";
     }
 
     EndTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;

@@ -195,6 +195,7 @@ static function bool CheckNameConflict(UnifiedTemplateDefinition TemplateDefinit
         for (i = 0; i < CDO.RegistrationHistory.Length; i++)
         {
             if (CDO.RegistrationHistory[i].TemplateName == TemplateDefinition.TemplateName &&
+                CDO.RegistrationHistory[i].TemplateType == TemplateDefinition.TemplateType &&
                 CDO.RegistrationHistory[i].bSuccessful &&
                 CDO.RegistrationHistory[i].SourceMod != TemplateDefinition.SourceMod)
             {
