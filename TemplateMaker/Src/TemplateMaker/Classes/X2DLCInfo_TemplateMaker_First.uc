@@ -34,6 +34,9 @@ static event OnLoadedSavedGameToStrategy()
     // Initialize core infrastructure systems
     InitializeCoreInfrastructure();
 
+    // Validate basic configuration
+    PerformBasicConfigurationValidation();
+
     // Initialize API registry
     InitializeAPIRegistry();
 

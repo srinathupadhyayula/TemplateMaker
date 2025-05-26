@@ -313,6 +313,16 @@ static function bool ProcessSingleTemplate(out UnifiedTemplateDefinition Templat
         if (ConflictResult.bConflictDetected)
         {
             bSuccess = HandleConflict(TemplateDefinition, ConflictResult);
+
+            // Store conflict information in validation errors if handling failed
+            if (!bSuccess)
+            {
+                if (TemplateDefinition.ValidationErrors.Length == 0)
+                {
+                    TemplateDefinition.ValidationErrors = ValidationErrors;
+                }
+                TemplateDefinition.ValidationErrors.AddItem("Conflict detected: " $ ConflictResult.ConflictDescription);
+            }
         }
     }
 
