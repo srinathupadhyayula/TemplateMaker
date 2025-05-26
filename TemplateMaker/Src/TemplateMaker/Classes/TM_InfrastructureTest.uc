@@ -242,7 +242,7 @@ static function TestResult TestSystemIntegration()
         Result.bPassed = false;
         Result.ErrorMessage = "Configuration Manager communication failed";
     }
-    else
+    else if (!bAPIRegistryResponding)
     {
         Result.bPassed = false;
         Result.ErrorMessage = "API Registry communication failed";
