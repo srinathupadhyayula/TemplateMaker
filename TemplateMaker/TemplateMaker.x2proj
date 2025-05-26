@@ -21,6 +21,15 @@
     <Folder Include="Src\TemplateMaker\Classes\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\Base\XComGame.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Base\XComEngine.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Base\XComEditor.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\TemplateMaker\XComTemplateMaker.ini">
       <SubType>Content</SubType>
     </Content>
@@ -44,15 +53,41 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Src\TemplateMaker\Classes\TM_TemplateDefinitionUnified.uc">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Src\TemplateMaker\Classes\TM_APIRegistry.uc">
+      <SubType>Content</SubType>
+    </Compile>
     <Compile Include="Src\TemplateMaker\Classes\TM_ConfigManager.uc">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Src\TemplateMaker\Classes\TM_InfrastructureTest.uc">
       <SubType>Content</SubType>
     </Compile>
     <Compile Include="Src\TemplateMaker\Classes\TM_Logger.uc">
       <SubType>Content</SubType>
     </Compile>
-    <Compile Include="Src\TemplateMaker\Classes\X2DownloadableContentInfo_TemplateMaker.uc">
+    <Compile Include="Src\TemplateMaker\Classes\TM_TemplateProcessor.uc">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Src\TemplateMaker\Classes\TM_TemplateTracker.uc">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Src\TemplateMaker\Classes\X2DLCInfo_TemplateMaker_First.uc">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Src\TemplateMaker\Classes\X2DLCInfo_TemplateMaker_Standard.uc">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Src\TemplateMaker\Classes\X2DLCInfo_TemplateMaker_Last.uc">
       <SubType>Content</SubType>
     </Compile>
   </ItemGroup>
-  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+  <PropertyGroup>
+    <SolutionRoot>$(MSBuildProjectDirectory)\..\</SolutionRoot>
+    <ScriptsDir>$(SolutionRoot).scripts\\</ScriptsDir>
+    <BuildCommonRoot>$(ScriptsDir)X2ModBuildCommon\</BuildCommonRoot>
+  </PropertyGroup>
+  <Import Project="$(BuildCommonRoot)XCOM2.targets" />
 </Project>

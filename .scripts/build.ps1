@@ -11,14 +11,14 @@ $common = Join-Path -Path $ScriptDirectory "X2ModBuildCommon\build_common.ps1"
 Write-Host "Sourcing $common"
 . ($common)
 
-$builder = [BuildProject]::new("EpicRulers", $srcDirectory, $sdkPath, $gamePath, $modDestinationPath)
+$builder = [BuildProject]::new("TemplateMaker", $srcDirectory, $sdkPath, $gamePath, $modDestinationPath)
 
 # Building against Highlander option 1:
 # Use Git to add Highlander submodule by running this command in the terminal:
 # git submodule add https://github.com/X2CommunityCore/X2WOTCCommunityHighlander.git
 # Uncomment the next line to enable building against Highlander.
-# Option 1: Use Git submodule
-$builder.IncludeSrc("$srcDirectory\X2WOTCCommunityHighlander\X2WOTCCommunityHighlander\Src")
+# Option 1: Use Git submodule - proper Community Highlander integration
+$builder.IncludeSrc("X2WOTCCommunityHighlander\X2WOTCCommunityHighlander\Src")
 
 # Building against Highlander option 2:
 # Specify path to your local Highlander repository or the Highlander's mod folder,

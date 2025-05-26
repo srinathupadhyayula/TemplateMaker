@@ -1,14 +1,20 @@
-TemplateMaker - Unified Template Management System
+TemplateMaker - Multi-Phase Template Management System
 
-A comprehensive template management system for XCOM 2 mods that consolidates template functionality from multiple foundational mods while maintaining 100% backward compatibility.
+A sophisticated template management system for XCOM 2 mods that consolidates template functionality from multiple foundational mods while maintaining 100% backward compatibility through a multi-phase architecture powered by X2WOTCCommunityHighlander.
 
-FEATURES:
-- Unified Template Processing: Single system handling all template operations
+MULTI-PHASE ARCHITECTURE:
+- First Phase (RUN_FIRST): Early initialization, core infrastructure setup, mod detection
+- Standard Phase (RUN_STANDARD): Main template processing, API compatibility layers
+- Last Phase (RUN_LAST): Final validation, conflict resolution, comprehensive reporting
+
+ENHANCED FEATURES:
+- Controlled Execution Order: Predictable processing sequence regardless of mod load order
+- Enhanced Mod Compatibility: Clear integration points for other mods to hook into specific phases
+- Strategic Conflict Resolution: TemplateMaker gets the final word on template modifications
+- Comprehensive Validation: Complete system health checks and performance monitoring
 - 100% Backward Compatibility: All existing configurations work without modification
 - Proactive Conflict Detection: Template tracking and conflict resolution system
 - Transparent Wrapper Behavior: Extensive logging showing how legacy configurations are processed
-- Enhanced Template Creation: Advanced template creation capabilities
-- Stukov Ecosystem Support: Special attention to mods that depend on multiple APIs simultaneously
 
 SUPPORTED SYSTEMS:
 - Template Master (EditTemplateStruct compatibility)

@@ -21,7 +21,7 @@
         {
             "label": "Clean",
             "type": "shell",
-            "command": "powershell.exe –NonInteractive –ExecutionPolicy Unrestricted -file '${workspaceRoot}\\.scripts\\X2ModBuildCommon\\clean.ps1' -modName 'EpicRulers' -srcDirectory '${workspaceRoot}' -sdkPath '${config:xcom.highlander.sdkroot}' -gamePath '${config:xcom.highlander.gameroot}' -modDestinationPath '${config:xcom.highlander.moddestination}'",
+            "command": "powershell.exe –NonInteractive –ExecutionPolicy Unrestricted -file '${workspaceRoot}\\.scripts\\X2ModBuildCommon\\clean.ps1' -modName 'TemplateMaker' -srcDirectory '${workspaceRoot}' -sdkPath '${config:xcom.highlander.sdkroot}' -gamePath '${config:xcom.highlander.gameroot}' -modDestinationPath '${config:xcom.highlander.moddestination}'",
             "group": "build",
             "problemMatcher": []
         },
