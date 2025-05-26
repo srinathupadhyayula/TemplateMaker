@@ -50,22 +50,32 @@ The mod provides a unified, configuration-based approach to template management,
 
 ## Architecture Overview
 
-TemplateMaker uses a modular wrapper architecture that preserves all existing API formats while providing enhanced capabilities:
+TemplateMaker uses a sophisticated multi-phase architecture powered by the X2WOTCCommunityHighlander's DLC Run Order system, providing precise control over template processing execution order while preserving all existing API formats.
 
-### Core Components
-- **TM_CoreTemplateProcessor**: Central template processing pipeline
-- **TM_CoreTemplateTracker**: Proactive conflict detection and template tracking
-- **TM_CoreLogger**: Comprehensive logging with wrapper behavior transparency
-- **TM_CoreConfigManager**: Enhanced configuration management
+### Multi-Phase Entry Points
+- **X2DLCInfo_TemplateMaker_First**: Early initialization phase (RUN_FIRST priority)
+  - Core infrastructure setup, API registry initialization, mod detection
+  - Establishes foundational systems that other mods should see first
+- **X2DLCInfo_TemplateMaker_Standard**: Main processing phase (RUN_STANDARD priority)
+  - Template processing through unified system, API compatibility layers
+  - Primary template operations and mod integration points
+- **X2DLCInfo_TemplateMaker_Last**: Final processing phase (RUN_LAST priority)
+  - Final compatibility checks, validation tests, comprehensive reporting
+  - Ensures TemplateMaker gets the last word on template modifications
 
-### Wrapper Classes
-- **TM_WrapperTemplateMaster**: EditTemplateStruct compatibility
-- **TM_WrapperDynamicEnemyCreation**: UnitDefinition compatibility
-- **TM_WrapperWSR**: GIVE_ABILITIES/CHANGE_TEMPLATE compatibility
-- **TM_WrapperBuildADarkEvent**: AbilityDarkEvent compatibility
-- **TM_WrapperAbilityEditor**: AbilityNames compatibility
-- **TM_WrapperPCSSystem**: X2EquipmentTemplate PCS compatibility
-- **TM_WrapperSitRepSystem**: X2SitRepTemplate compatibility
+### Core Infrastructure Components
+- **TM_TemplateProcessor**: Central template processing pipeline with multi-phase coordination
+- **TM_TemplateTracker**: Proactive conflict detection and template tracking across all phases
+- **TM_Logger**: Comprehensive logging with performance monitoring and phase tracking
+- **TM_ConfigManager**: Enhanced configuration management with mod-aware optimization
+- **TM_APIRegistry**: API compatibility registry supporting 7+ legacy formats
+- **TM_InfrastructureTest**: Comprehensive validation testing and system health checks
+
+### Strategic Benefits
+- **Controlled Execution Order**: Predictable processing sequence regardless of mod load order
+- **Enhanced Mod Compatibility**: Clear integration points for other mods to hook into specific phases
+- **Conflict Resolution**: Strategic conflict resolution with TemplateMaker getting the final word
+- **Performance Optimization**: Phase-specific optimizations and comprehensive monitoring
 
 ## Supported API Formats
 
