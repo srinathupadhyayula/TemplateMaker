@@ -768,4 +768,3 @@ static function GenerateTroubleshootingReport(string ProblemDescription);
 5. Clear migration guides for mod authors
 
 ---
-*This document will be updated with specific Task Manager task IDs once tasks are created.*
