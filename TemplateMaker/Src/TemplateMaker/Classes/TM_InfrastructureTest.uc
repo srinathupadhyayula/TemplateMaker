@@ -219,32 +219,33 @@ static function TestResult TestSystemIntegration()
 {
     local TestResult Result;
     local float StartTime, EndTime;
+    local bool bConfigManagerResponding, bAPIRegistryResponding;
 
     Result.TestName = "System Integration";
     StartTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
 
-    // Test cross-system communication - using simple conditional logic
+    // Test cross-system communication with meaningful assertions
+
     // Logger -> ConfigManager
-    if (class'TM_ConfigManager'.static.IsPerformanceLoggingEnabled() ||
-        !class'TM_ConfigManager'.static.IsPerformanceLoggingEnabled())
+    bConfigManagerResponding = class'TM_ConfigManager'.static.IsInitialized();
+
+    // ConfigManager -> APIRegistry
+    bAPIRegistryResponding = class'TM_APIRegistry'.static.GetAllAPIs().Length > 0;
+
+    if (bConfigManagerResponding && bAPIRegistryResponding)
     {
-        // ConfigManager -> APIRegistry
-        if (class'TM_APIRegistry'.static.IsAPISupported(EAF_Unified) ||
-            !class'TM_APIRegistry'.static.IsAPISupported(EAF_Unified))
-        {
-            Result.bPassed = true;
-            Result.Details = "Cross-system communication functional";
-        }
-        else
-        {
-            Result.bPassed = false;
-            Result.ErrorMessage = "API Registry communication failed";
-        }
+        Result.bPassed = true;
+        Result.Details = "Cross-system communication functional";
+    }
+    else if (!bConfigManagerResponding)
+    {
+        Result.bPassed = false;
+        Result.ErrorMessage = "Configuration Manager communication failed";
     }
     else
     {
         Result.bPassed = false;
-        Result.ErrorMessage = "Configuration Manager communication failed";
+        Result.ErrorMessage = "API Registry communication failed";
     }
 
     EndTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;

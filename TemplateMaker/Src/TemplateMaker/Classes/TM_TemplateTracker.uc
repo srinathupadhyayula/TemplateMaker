@@ -188,23 +188,19 @@ static function bool CheckNameConflict(UnifiedTemplateDefinition TemplateDefinit
     bConflictFound = false;
     ConflictingMods.Length = 0;
 
-    // Check against registered templates
-    if (CDO.RegisteredTemplateNames.Find(TemplateDefinition.TemplateName) != INDEX_NONE)
+    // Find which mods registered this template by checking registration history directly
+    for (i = 0; i < CDO.RegistrationHistory.Length; i++)
     {
-        // Find which mods registered this template
-        for (i = 0; i < CDO.RegistrationHistory.Length; i++)
+        if (CDO.RegistrationHistory[i].TemplateName == TemplateDefinition.TemplateName &&
+            CDO.RegistrationHistory[i].TemplateType == TemplateDefinition.TemplateType &&
+            CDO.RegistrationHistory[i].bSuccessful &&
+            CDO.RegistrationHistory[i].SourceMod != TemplateDefinition.SourceMod)
         {
-            if (CDO.RegistrationHistory[i].TemplateName == TemplateDefinition.TemplateName &&
-                CDO.RegistrationHistory[i].TemplateType == TemplateDefinition.TemplateType &&
-                CDO.RegistrationHistory[i].bSuccessful &&
-                CDO.RegistrationHistory[i].SourceMod != TemplateDefinition.SourceMod)
+            if (ConflictingMods.Find(CDO.RegistrationHistory[i].SourceMod) == INDEX_NONE)
             {
-                if (ConflictingMods.Find(CDO.RegistrationHistory[i].SourceMod) == INDEX_NONE)
-                {
-                    ConflictingMods.AddItem(CDO.RegistrationHistory[i].SourceMod);
-                }
-                bConflictFound = true;
+                ConflictingMods.AddItem(CDO.RegistrationHistory[i].SourceMod);
             }
+            bConflictFound = true;
         }
     }
 
