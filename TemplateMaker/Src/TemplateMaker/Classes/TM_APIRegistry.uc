@@ -9,6 +9,7 @@ class TM_APIRegistry extends Object dependson(TM_TemplateDefinitionUnified);
 
 // Simple tracking array - populated once during initialization
 var array<APICompatibilityInfo> RegisteredAPIs;
+var bool bSummaryLogged; // Prevent duplicate summary logs
 
 // Initialize the API registry with all supported formats
 static function Initialize()
@@ -385,7 +386,10 @@ static function LogAPIRegistrySummary()
     CDO = TM_APIRegistry(class'XComEngine'.static.GetClassDefaultObject(class'TM_APIRegistry'));
     if (CDO == none) return;
 
-    class'TM_Logger'.static.LogInfo("=== API REGISTRY SUMMARY ===", "APIRegistry");
+    // Prevent duplicate summaries - only log once per session
+    if (CDO.bSummaryLogged) return;
+
+    class'TM_Logger'.static.LogInfoBlock("=== API REGISTRY SUMMARY ===", "APIRegistry");
 
     for (i = 0; i < CDO.RegisteredAPIs.Length; i++)
     {
@@ -399,7 +403,10 @@ static function LogAPIRegistrySummary()
 
     class'TM_Logger'.static.LogInfo("Total APIs: " $ CDO.RegisteredAPIs.Length $
         ", Active: " $ ActiveCount, "APIRegistry");
-    class'TM_Logger'.static.LogInfo("=== END API REGISTRY SUMMARY ===", "APIRegistry");
+    class'TM_Logger'.static.LogInfoBlock("=== END API REGISTRY SUMMARY ===", "APIRegistry");
+
+    // Mark summary as logged to prevent duplicates
+    CDO.bSummaryLogged = true;
 }
 
 // No defaultproperties needed - using CDO pattern with array length checks

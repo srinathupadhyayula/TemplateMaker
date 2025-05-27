@@ -99,7 +99,7 @@ static event OnPostTemplatesCreated()
     CDO.bLastPhaseCompleted = true;
 
     class'TM_Logger'.static.LogInfo("TemplateMaker Last Phase template processing completed", "LastPhase");
-    class'TM_Logger'.static.LogInfo("=== ALL TEMPLATEMAKER PHASES COMPLETED ===", "LastPhase");
+    class'TM_Logger'.static.LogInfoBlock("=== ALL TEMPLATEMAKER PHASES COMPLETED ===", "LastPhase");
 }
 
 // Initialize final processing systems
@@ -109,7 +109,7 @@ static function InitializeFinalProcessingSystems()
 
     StartTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
 
-    class'TM_Logger'.static.LogInfo("Initializing final processing systems...", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Initializing final processing systems...", "LastPhase");
 
     // Ensure all core systems are ready for final operations
     ValidateAllSystemsReady();
@@ -120,43 +120,43 @@ static function InitializeFinalProcessingSystems()
     EndTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
     class'TM_Logger'.static.LogPerformanceMetric("FinalProcessingInit", EndTime - StartTime, 1, 0, "Final processing systems initialization");
 
-    class'TM_Logger'.static.LogInfo("Final processing systems initialized successfully", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Final processing systems initialized successfully", "LastPhase");
 }
 
 // Set up final validation systems
 static function SetupFinalValidationSystems()
 {
-    class'TM_Logger'.static.LogInfo("Setting up final validation systems...", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Setting up final validation systems...", "LastPhase");
 
     // Prepare infrastructure testing if debug mode is enabled
     if (class'TM_ConfigManager'.static.AreDebugCommandsEnabled())
     {
-        class'TM_Logger'.static.LogInfo("Debug mode enabled - preparing infrastructure tests", "LastPhase");
+        class'TM_Logger'.static.LogDebug("Debug mode enabled - preparing infrastructure tests", "LastPhase");
     }
 
-    class'TM_Logger'.static.LogInfo("Final validation systems ready", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Final validation systems ready", "LastPhase");
 }
 
 // Initialize cleanup systems
 static function InitializeCleanupSystems()
 {
-    class'TM_Logger'.static.LogInfo("Initializing cleanup systems...", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Initializing cleanup systems...", "LastPhase");
 
     // Prepare cleanup operations for post-processing
     // This includes memory cleanup, temporary data removal, etc.
 
-    class'TM_Logger'.static.LogInfo("Cleanup systems initialized", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Cleanup systems initialized", "LastPhase");
 }
 
 // Prepare comprehensive reporting
 static function PrepareComprehensiveReporting()
 {
-    class'TM_Logger'.static.LogInfo("Preparing comprehensive reporting systems...", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Preparing comprehensive reporting systems...", "LastPhase");
 
     // Set up systems for generating detailed reports
     // This includes performance metrics, conflict reports, etc.
 
-    class'TM_Logger'.static.LogInfo("Comprehensive reporting systems ready", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Comprehensive reporting systems ready", "LastPhase");
 }
 
 // Perform final compatibility checks
@@ -182,7 +182,7 @@ static function PerformFinalCompatibilityChecks()
     ConflictCount = class'TM_TemplateTracker'.static.GetConflictCount();
 
     // Log final compatibility status
-    class'TM_Logger'.static.LogInfo("=== FINAL COMPATIBILITY STATUS ===", "LastPhase");
+    class'TM_Logger'.static.LogInfoBlock("=== FINAL COMPATIBILITY STATUS ===", "LastPhase");
     class'TM_Logger'.static.LogInfo("Legacy Mods Detected: " $ ModCount, "LastPhase");
     class'TM_Logger'.static.LogInfo("Templates Processed: " $ ProcessedTemplates, "LastPhase");
     class'TM_Logger'.static.LogInfo("Processing Errors: " $ ErrorCount, "LastPhase");
@@ -207,12 +207,12 @@ static function PerformFinalCompatibilityChecks()
 // Execute final template overrides
 static function ExecuteFinalTemplateOverrides()
 {
-    class'TM_Logger'.static.LogInfo("Executing final template overrides...", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Executing final template overrides...", "LastPhase");
 
     // Apply any final template modifications that need to override other mods
     // This ensures TemplateMaker gets the last word on template modifications
 
-    class'TM_Logger'.static.LogInfo("Final template overrides completed", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Final template overrides completed", "LastPhase");
 }
 
 // Run validation tests if enabled
@@ -256,7 +256,7 @@ static function RunValidationTests()
 // Generate comprehensive status reports
 static function GenerateComprehensiveStatusReports()
 {
-    class'TM_Logger'.static.LogInfo("Generating comprehensive status reports...", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Generating comprehensive status reports...", "LastPhase");
 
     // Generate infrastructure report
     class'TM_InfrastructureTest'.static.GenerateInfrastructureReport();
@@ -270,18 +270,18 @@ static function GenerateComprehensiveStatusReports()
     // Generate configuration summary
     class'TM_ConfigManager'.static.LogConfigurationSummary();
 
-    class'TM_Logger'.static.LogInfo("Comprehensive status reports generated", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Comprehensive status reports generated", "LastPhase");
 }
 
 // Perform cleanup operations
 static function PerformCleanupOperations()
 {
-    class'TM_Logger'.static.LogInfo("Performing cleanup operations...", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Performing cleanup operations...", "LastPhase");
 
     // Clean up temporary data, optimize memory usage, etc.
     // This ensures the system is in a clean state after processing
 
-    class'TM_Logger'.static.LogInfo("Cleanup operations completed", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Cleanup operations completed", "LastPhase");
 }
 
 // Validate all systems are ready
@@ -312,7 +312,7 @@ static function ValidateAllSystemsReady()
 
     if (bAllSystemsReady)
     {
-        class'TM_Logger'.static.LogInfo("All systems validated and ready for final processing", "LastPhase");
+        class'TM_Logger'.static.LogDebug("All systems validated and ready for final processing", "LastPhase");
     }
     else
     {
@@ -323,12 +323,12 @@ static function ValidateAllSystemsReady()
 // Initialize final conflict resolution
 static function InitializeFinalConflictResolution()
 {
-    class'TM_Logger'.static.LogInfo("Initializing final conflict resolution...", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Initializing final conflict resolution...", "LastPhase");
 
     // Set up final conflict resolution strategies
     // This ensures any remaining conflicts are resolved with TemplateMaker's preferences
 
-    class'TM_Logger'.static.LogInfo("Final conflict resolution initialized", "LastPhase");
+    class'TM_Logger'.static.LogDebug("Final conflict resolution initialized", "LastPhase");
 }
 
 // Called when loading a saved game created before this mod was installed

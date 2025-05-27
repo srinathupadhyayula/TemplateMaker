@@ -105,7 +105,7 @@ static function InitializeMainProcessingSystems()
 
     StartTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
 
-    class'TM_Logger'.static.LogInfo("Initializing main processing systems...", "StandardPhase");
+    class'TM_Logger'.static.LogDebug("Initializing main processing systems...", "StandardPhase");
 
     // Ensure template processor is ready for main operations
     if (!class'TM_TemplateProcessor'.static.IsInitialized())
@@ -120,7 +120,7 @@ static function InitializeMainProcessingSystems()
     EndTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
     class'TM_Logger'.static.LogPerformanceMetric("MainProcessingInit", EndTime - StartTime, 1, 0, "Main processing systems initialization");
 
-    class'TM_Logger'.static.LogInfo("Main processing systems initialized successfully", "StandardPhase");
+    class'TM_Logger'.static.LogDebug("Main processing systems initialized successfully", "StandardPhase");
 }
 
 // Initialize API compatibility layers
@@ -132,14 +132,14 @@ static function InitializeAPICompatibilityLayers()
 
     StartTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
 
-    class'TM_Logger'.static.LogInfo("Initializing API compatibility layers...", "StandardPhase");
+    class'TM_Logger'.static.LogDebug("Initializing API compatibility layers...", "StandardPhase");
 
     // Get all active APIs and initialize their compatibility layers
     ActiveAPIs = class'TM_APIRegistry'.static.GetActiveAPIs();
 
     for (i = 0; i < ActiveAPIs.Length; i++)
     {
-        class'TM_Logger'.static.LogDebug("Initializing compatibility layer for: " $ ActiveAPIs[i].FormatName, "StandardPhase");
+        class'TM_Logger'.static.LogDebug("Initializing compatibility layer for: " $ ActiveAPIs[i].FormatName, "StandardPhase", "Format: " $ ActiveAPIs[i].FormatName $ ", Priority: " $ ActiveAPIs[i].Priority);
 
         // Initialize specific compatibility layers based on API format
         InitializeSpecificAPILayer(ActiveAPIs[i]);
@@ -148,7 +148,7 @@ static function InitializeAPICompatibilityLayers()
     EndTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
     class'TM_Logger'.static.LogPerformanceMetric("APILayersInit", EndTime - StartTime, ActiveAPIs.Length, 0, "API compatibility layers initialization");
 
-    class'TM_Logger'.static.LogInfo("API compatibility layers initialized for " $ ActiveAPIs.Length $ " formats", "StandardPhase");
+    class'TM_Logger'.static.LogDebug("API compatibility layers initialized for " $ ActiveAPIs.Length $ " formats", "StandardPhase");
 }
 
 // Initialize specific API compatibility layer
@@ -186,7 +186,7 @@ static function InitializeSpecificAPILayer(APICompatibilityInfo APIInfo)
 // Configure template processing pipeline
 static function ConfigureTemplateProcessingPipeline()
 {
-    class'TM_Logger'.static.LogInfo("Configuring template processing pipeline...", "StandardPhase");
+    class'TM_Logger'.static.LogDebug("Configuring template processing pipeline...", "StandardPhase");
 
     // Configure processing order and priorities
     class'TM_TemplateProcessor'.static.ConfigureProcessingPipeline();
@@ -194,7 +194,7 @@ static function ConfigureTemplateProcessingPipeline()
     // Set up conflict resolution strategies
     class'TM_TemplateProcessor'.static.ConfigureConflictResolution();
 
-    class'TM_Logger'.static.LogInfo("Template processing pipeline configured", "StandardPhase");
+    class'TM_Logger'.static.LogDebug("Template processing pipeline configured", "StandardPhase");
 }
 
 // Initialize mod integration points

@@ -18,6 +18,7 @@ var int MaxCacheSize;
 // Mod detection tracking - simple flags populated during mod detection
 var array<string> DetectedLegacyMods;
 var bool bModDetectionCompleted;
+var bool bTrackingReportLogged; // Prevent duplicate tracking reports
 
 // Initialize the template tracker
 static function Initialize()
@@ -530,7 +531,7 @@ static function LogDetectedMods()
     CDO = TM_TemplateTracker(class'XComEngine'.static.GetClassDefaultObject(class'TM_TemplateTracker'));
     if (CDO == none) return;
 
-    class'TM_Logger'.static.LogWarning("=== LEGACY TEMPLATE MODS DETECTED ===", "TemplateTracker");
+    class'TM_Logger'.static.LogWarningBlock("=== LEGACY TEMPLATE MODS DETECTED ===", "TemplateTracker");
 
     for (i = 0; i < CDO.DetectedLegacyMods.Length; i++)
     {
@@ -539,7 +540,7 @@ static function LogDetectedMods()
 
     class'TM_Logger'.static.LogWarning("These mods may conflict with TemplateMaker's unified system", "TemplateTracker");
     class'TM_Logger'.static.LogWarning("Consider enabling conflict resolution or migrating to TemplateMaker", "TemplateTracker");
-    class'TM_Logger'.static.LogWarning("=== END LEGACY MOD DETECTION ===", "TemplateTracker");
+    class'TM_Logger'.static.LogWarningBlock("=== END LEGACY MOD DETECTION ===", "TemplateTracker");
 }
 
 // Mod detection query methods
@@ -594,7 +595,10 @@ static function GenerateTrackingReport()
     CDO = TM_TemplateTracker(class'XComEngine'.static.GetClassDefaultObject(class'TM_TemplateTracker'));
     if (CDO == none) return;
 
-    class'TM_Logger'.static.LogInfo("=== TEMPLATE TRACKING REPORT ===", "TemplateTracker");
+    // Prevent duplicate reports - only log once per session
+    if (CDO.bTrackingReportLogged) return;
+
+    class'TM_Logger'.static.LogInfoBlock("=== TEMPLATE TRACKING REPORT ===", "TemplateTracker");
     class'TM_Logger'.static.LogInfo("Total Registered Templates: " $ CDO.RegisteredTemplateNames.Length, "TemplateTracker");
     class'TM_Logger'.static.LogInfo("Total Registration Attempts: " $ CDO.RegistrationHistory.Length, "TemplateTracker");
     class'TM_Logger'.static.LogInfo("Total Conflicts Detected: " $ CDO.ConflictCache.Length, "TemplateTracker");
@@ -619,7 +623,10 @@ static function GenerateTrackingReport()
         }
     }
 
-    class'TM_Logger'.static.LogInfo("=== END TEMPLATE TRACKING REPORT ===", "TemplateTracker");
+    class'TM_Logger'.static.LogInfoBlock("=== END TEMPLATE TRACKING REPORT ===", "TemplateTracker");
+
+    // Mark report as logged to prevent duplicates
+    CDO.bTrackingReportLogged = true;
 }
 
 defaultproperties

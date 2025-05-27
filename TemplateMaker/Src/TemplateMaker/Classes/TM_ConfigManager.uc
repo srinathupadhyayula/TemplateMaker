@@ -21,6 +21,7 @@ var config bool bEnableAsyncProcessing;         // Enable asynchronous processin
 
 // Debugging settings
 var config ELogLevel LogLevel;                  // Logging level
+var config bool bVerboseLogging;               // Enable verbose details for all log levels
 var config bool bLogWrapperBehavior;            // Log wrapper translation behavior
 var config bool bLogTemplateCreation;          // Log template creation operations
 var config bool bLogConflictResolution;        // Log conflict detection and resolution
@@ -47,7 +48,7 @@ var config array<ConfigValidationResult> ValidationResults;
 // Initialize the configuration system
 static function Initialize()
 {
-    class'TM_Logger'.static.LogInfo("TM_ConfigManager initializing...", "ConfigManager");
+    class'TM_Logger'.static.LogDebug("TM_ConfigManager initializing...", "ConfigManager");
 
     // Validate core settings
     ValidateCoreSettings();
@@ -58,7 +59,7 @@ static function Initialize()
     // Perform startup mod detection and warnings
     PerformStartupModDetection();
 
-    class'TM_Logger'.static.LogInfo("TM_ConfigManager initialized successfully", "ConfigManager");
+    class'TM_Logger'.static.LogDebug("TM_ConfigManager initialized successfully", "ConfigManager");
 }
 
 // Check if configuration manager is initialized
@@ -130,6 +131,11 @@ static function bool AreDebugCommandsEnabled()
 static function ELogLevel GetLogLevel()
 {
     return default.LogLevel;
+}
+
+static function bool IsVerboseLoggingEnabled()
+{
+    return default.bVerboseLogging;
 }
 
 static function bool IsWrapperBehaviorLoggingEnabled()
@@ -287,10 +293,10 @@ static function ValidateCoreSettings()
     }
 
     // Validate log level
-    if (default.LogLevel < ELL_Error || default.LogLevel > ELL_Verbose)
+    if (default.LogLevel < ELL_None || default.LogLevel > ELL_Debug)
     {
         ValidationErrors.AddItem("Invalid LogLevel value");
-        default.LogLevel = ELL_Info; // Set to safe default
+        default.LogLevel = ELL_Warning; // Set to safe default
     }
 
     // Log validation results
@@ -337,28 +343,29 @@ static function bool IsConfigurationValid()
 static function SetConflictResolutionStrategy(EConflictResolution Strategy)
 {
     default.ConflictResolutionStrategy = Strategy;
-    class'TM_Logger'.static.LogInfo("Conflict resolution strategy changed to: " $ Strategy, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Conflict resolution strategy changed to: " $ Strategy, "ConfigManager");
 }
 
 static function SetLogLevel(ELogLevel Level)
 {
     default.LogLevel = Level;
-    class'TM_Logger'.static.LogInfo("Log level changed to: " $ Level, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Log level changed to: " $ Level, "ConfigManager");
 }
 
 // Configuration summary for debugging
 static function LogConfigurationSummary()
 {
-    class'TM_Logger'.static.LogInfo("=== CONFIGURATION SUMMARY ===", "ConfigManager");
-    class'TM_Logger'.static.LogInfo("Unified Processing: " $ default.bEnableUnifiedProcessing, "ConfigManager");
-    class'TM_Logger'.static.LogInfo("Legacy Compatibility: " $ default.bEnableLegacyCompatibility, "ConfigManager");
-    class'TM_Logger'.static.LogInfo("Conflict Detection: " $ default.bEnableConflictDetection, "ConfigManager");
-    class'TM_Logger'.static.LogInfo("Conflict Resolution: " $ default.ConflictResolutionStrategy, "ConfigManager");
-    class'TM_Logger'.static.LogInfo("Performance Logging: " $ default.bEnablePerformanceLogging, "ConfigManager");
-    class'TM_Logger'.static.LogInfo("Log Level: " $ default.LogLevel, "ConfigManager");
-    class'TM_Logger'.static.LogInfo("Loaded Config Files: " $ default.LoadedConfigFiles.Length, "ConfigManager");
-    class'TM_Logger'.static.LogInfo("Total Validation Errors: " $ GetTotalValidationErrors(), "ConfigManager");
-    class'TM_Logger'.static.LogInfo("=== END CONFIGURATION SUMMARY ===", "ConfigManager");
+    class'TM_Logger'.static.LogDebugBlock("=== CONFIGURATION SUMMARY ===", "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Unified Processing: " $ default.bEnableUnifiedProcessing, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Legacy Compatibility: " $ default.bEnableLegacyCompatibility, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Conflict Detection: " $ default.bEnableConflictDetection, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Conflict Resolution: " $ default.ConflictResolutionStrategy, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Performance Logging: " $ default.bEnablePerformanceLogging, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Log Level: " $ default.LogLevel, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Verbose Logging: " $ default.bVerboseLogging, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Loaded Config Files: " $ default.LoadedConfigFiles.Length, "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Total Validation Errors: " $ GetTotalValidationErrors(), "ConfigManager");
+    class'TM_Logger'.static.LogDebugBlock("=== END CONFIGURATION SUMMARY ===", "ConfigManager");
 }
 
 // Startup mod detection and warning system
@@ -367,7 +374,7 @@ static function PerformStartupModDetection()
     local array<string> DetectedMods;
     local array<string> StartupWarnings;
 
-    class'TM_Logger'.static.LogInfo("Performing startup mod compatibility check...", "ConfigManager");
+    class'TM_Logger'.static.LogDebug("Performing startup mod compatibility check...", "ConfigManager");
 
     // Check if template tracker has completed mod detection
     if (class'TM_TemplateTracker'.static.HasModDetectionCompleted())
@@ -384,7 +391,7 @@ static function PerformStartupModDetection()
         }
         else
         {
-            class'TM_Logger'.static.LogInfo("No legacy template mods detected - optimal configuration", "ConfigManager");
+            class'TM_Logger'.static.LogDebug("No legacy template mods detected - optimal configuration", "ConfigManager");
         }
     }
     else
@@ -419,21 +426,21 @@ static function DisplayStartupWarnings(array<string> Warnings)
 {
     local int i;
 
-    class'TM_Logger'.static.LogWarning("=== STARTUP MOD COMPATIBILITY WARNING ===", "ConfigManager");
+    class'TM_Logger'.static.LogWarningBlock("=== STARTUP MOD COMPATIBILITY WARNING ===", "ConfigManager");
 
     for (i = 0; i < Warnings.Length; i++)
     {
         class'TM_Logger'.static.LogWarning(Warnings[i], "ConfigManager");
     }
 
-    class'TM_Logger'.static.LogWarning("=== END STARTUP WARNING ===", "ConfigManager");
+    class'TM_Logger'.static.LogWarningBlock("=== END STARTUP WARNING ===", "ConfigManager");
 }
 
 static function SuggestConfigurationChanges(array<string> DetectedMods)
 {
     local bool bSuggestOverride, bSuggestConflictDetection;
 
-    class'TM_Logger'.static.LogWarning("=== CONFIGURATION SUGGESTIONS ===", "ConfigManager");
+    class'TM_Logger'.static.LogWarningBlock("=== CONFIGURATION SUGGESTIONS ===", "ConfigManager");
 
     // Analyze detected mods and suggest appropriate settings
     if (DetectedMods.Find("Weapon Skin Replacer (WSR)") != INDEX_NONE ||
@@ -474,7 +481,7 @@ static function SuggestConfigurationChanges(array<string> DetectedMods)
         class'TM_Logger'.static.LogWarning("Template conflicts will cause errors instead of being resolved", "ConfigManager");
     }
 
-    class'TM_Logger'.static.LogWarning("=== END CONFIGURATION SUGGESTIONS ===", "ConfigManager");
+    class'TM_Logger'.static.LogWarningBlock("=== END CONFIGURATION SUGGESTIONS ===", "ConfigManager");
 }
 
 // Enhanced configuration validation with mod awareness
@@ -529,6 +536,7 @@ defaultproperties
 
     // Debugging defaults
     LogLevel=ELL_Info
+    bVerboseLogging=false
     bLogWrapperBehavior=true
     bLogTemplateCreation=true
     bLogConflictResolution=true

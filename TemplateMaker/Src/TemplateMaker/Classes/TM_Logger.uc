@@ -10,11 +10,11 @@ class TM_Logger extends Object dependson(TM_TemplateDefinitionUnified);
 // Log level enumeration
 enum ELogLevel
 {
+    ELL_None,       // No logging (disabled)
     ELL_Error,      // Critical errors that prevent operation
     ELL_Warning,    // Non-critical issues that should be noted
     ELL_Info,       // General information about operations
-    ELL_Debug,      // Detailed debugging information
-    ELL_Verbose     // Extremely detailed information for troubleshooting
+    ELL_Debug       // Detailed debugging information
 };
 
 // Configuration variables - hardcoded values (not config variables)
@@ -64,46 +64,104 @@ static function Log(string Message)
     LogInfo(Message);
 }
 
-// Core logging methods with level checking
-static function LogError(string Message, optional string Context)
+// Core logging methods with level checking and verbose details support
+static function LogError(string Message, optional string Context, optional string VerboseDetails)
 {
     if (ShouldLog(ELL_Error))
     {
-        InternalLog(ELL_Error, Message, Context);
+        InternalLog(ELL_Error, FormatMessageWithVerboseDetails(Message, VerboseDetails), Context);
     }
 }
 
-static function LogWarning(string Message, optional string Context)
+static function LogWarning(string Message, optional string Context, optional string VerboseDetails)
 {
     if (ShouldLog(ELL_Warning))
     {
-        InternalLog(ELL_Warning, Message, Context);
+        InternalLog(ELL_Warning, FormatMessageWithVerboseDetails(Message, VerboseDetails), Context);
     }
 }
 
-static function LogInfo(string Message, optional string Context)
+static function LogInfo(string Message, optional string Context, optional string VerboseDetails)
 {
     if (ShouldLog(ELL_Info))
     {
-        InternalLog(ELL_Info, Message, Context);
+        InternalLog(ELL_Info, FormatMessageWithVerboseDetails(Message, VerboseDetails), Context);
     }
 }
 
-static function LogDebug(string Message, optional string Context)
+static function LogDebug(string Message, optional string Context, optional string VerboseDetails)
 {
     if (ShouldLog(ELL_Debug))
     {
-        InternalLog(ELL_Debug, Message, Context);
+        InternalLog(ELL_Debug, FormatMessageWithVerboseDetails(Message, VerboseDetails), Context);
     }
 }
 
-static function LogVerbose(string Message, optional string Context)
+// Blank line logging for visual separation
+static function LogBlankLine(ELogLevel Level)
 {
-    if (ShouldLog(ELL_Verbose))
+    if (ShouldLog(Level))
     {
-        InternalLog(ELL_Verbose, Message, Context);
+        InternalLog(Level, "", "");
     }
 }
+
+// Enhanced logging methods with automatic block detection and visual separation
+static function LogWarningBlock(string Message, optional string Context, optional string VerboseDetails)
+{
+    // Add blank line before block start messages
+    if (IsBlockStartMessage(Message))
+    {
+        LogBlankLine(ELL_Warning);
+    }
+
+    // Log the actual message
+    LogWarning(Message, Context, VerboseDetails);
+
+    // Add blank line after block end messages
+    if (IsBlockEndMessage(Message))
+    {
+        LogBlankLine(ELL_Warning);
+    }
+}
+
+static function LogInfoBlock(string Message, optional string Context, optional string VerboseDetails)
+{
+    // Add blank line before block start messages
+    if (IsBlockStartMessage(Message))
+    {
+        LogBlankLine(ELL_Info);
+    }
+
+    // Log the actual message
+    LogInfo(Message, Context, VerboseDetails);
+
+    // Add blank line after block end messages
+    if (IsBlockEndMessage(Message))
+    {
+        LogBlankLine(ELL_Info);
+    }
+}
+
+static function LogDebugBlock(string Message, optional string Context, optional string VerboseDetails)
+{
+    // Add blank line before block start messages
+    if (IsBlockStartMessage(Message))
+    {
+        LogBlankLine(ELL_Debug);
+    }
+
+    // Log the actual message
+    LogDebug(Message, Context, VerboseDetails);
+
+    // Add blank line after block end messages
+    if (IsBlockEndMessage(Message))
+    {
+        LogBlankLine(ELL_Debug);
+    }
+}
+
+
 
 // Legacy compatibility methods
 static function LogObject(string Message, Object Obj)
@@ -170,6 +228,55 @@ static function string FormatMessage(string Level, string Message)
     return "[" $ Level $ "] " $ Message;
 }
 
+// Format message with optional verbose details
+static function string FormatMessageWithVerboseDetails(string Message, optional string VerboseDetails)
+{
+    local string FormattedMessage;
+
+    FormattedMessage = Message;
+
+    // Add verbose details if enabled and provided
+    if (VerboseDetails != "" && class'TM_ConfigManager'.static.IsVerboseLoggingEnabled())
+    {
+        FormattedMessage $= " | " $ VerboseDetails;
+    }
+
+    return FormattedMessage;
+}
+
+// Block detection helper functions for visual separation
+static function bool IsBlockStartMessage(string Message)
+{
+    // Detect messages that start a block (begin with "=== " and contain block keywords)
+    if (Left(Message, 4) ~= "=== ")
+    {
+        // Check for block start keywords
+        return (InStr(Caps(Message), "WARNING") != INDEX_NONE ||
+                InStr(Caps(Message), "DETECTED") != INDEX_NONE ||
+                InStr(Caps(Message), "SUGGESTIONS") != INDEX_NONE ||
+                InStr(Caps(Message), "CONFIGURATION") != INDEX_NONE ||
+                InStr(Caps(Message), "COMPATIBILITY") != INDEX_NONE ||
+                InStr(Caps(Message), "TRACKING") != INDEX_NONE ||
+                InStr(Caps(Message), "REPORT") != INDEX_NONE ||
+                InStr(Caps(Message), "SUMMARY") != INDEX_NONE ||
+                InStr(Caps(Message), "TROUBLESHOOTING") != INDEX_NONE ||
+                InStr(Caps(Message), "STARTUP") != INDEX_NONE ||
+                InStr(Caps(Message), "LEGACY") != INDEX_NONE ||
+                InStr(Caps(Message), "FINAL") != INDEX_NONE) &&
+               InStr(Caps(Message), "END") == INDEX_NONE; // Exclude "END" messages
+    }
+
+    return false;
+}
+
+static function bool IsBlockEndMessage(string Message)
+{
+    // Detect messages that end a block (begin with "=== END" or similar closing patterns)
+    return (Left(Message, 7) ~= "=== END" ||
+            Left(Message, 8) ~= "=== FINAL" ||
+            InStr(Caps(Message), "END ") != INDEX_NONE && Left(Message, 4) ~= "=== ");
+}
+
 // Template operation logging
 static function LogTemplateCreation(name TemplateName, string TemplateClass, string SourceMod, bool bSuccess)
 {
@@ -182,7 +289,7 @@ static function LogTemplateCreation(name TemplateName, string TemplateClass, str
               " (Class: " $ TemplateClass $ ", Mod: " $ SourceMod $ ")";
 
     if (bSuccess)
-        LogInfo(Message, "TemplateCreation");
+        LogDebug(Message, "TemplateCreation");
     else
         LogError(Message, "TemplateCreation");
 }
@@ -192,7 +299,7 @@ static function LogWrapperActivity(string WrapperName, string Activity)
     // Get setting from ConfigManager instead of own config
     if (!class'TM_ConfigManager'.static.IsWrapperBehaviorLoggingEnabled()) return;
 
-    LogInfo("Wrapper[" $ WrapperName $ "]: " $ Activity, "WrapperBehavior");
+    LogDebug("Wrapper[" $ WrapperName $ "]: " $ Activity, "WrapperBehavior");
 }
 
 static function LogConflictDetection(name TemplateName, array<string> ConflictingMods)
@@ -263,7 +370,7 @@ static function LogConfigurationParsing(string ConfigFile, int EntriesProcessed,
     if (ErrorsFound > 0)
         LogWarning(Message, "ConfigParsing");
     else
-        LogInfo(Message, "ConfigParsing");
+        LogDebug(Message, "ConfigParsing");
 }
 
 // Wrapper behavior transparency logging
@@ -316,27 +423,27 @@ static function GenerateTroubleshootingReport(string ProblemDescription)
     CDO = TM_Logger(class'XComEngine'.static.GetClassDefaultObject(class'TM_Logger'));
     if (CDO == none) return;
 
-    LogInfo("=== TROUBLESHOOTING REPORT ===", "TroubleshootingReport");
-    LogInfo("Problem: " $ ProblemDescription, "TroubleshootingReport");
-    LogInfo("Session Duration: " $ (class'WorldInfo'.static.GetWorldInfo().TimeSeconds - CDO.SessionStartTime) $ "s", "TroubleshootingReport");
+    LogDebugBlock("=== TROUBLESHOOTING REPORT ===", "TroubleshootingReport");
+    LogDebug("Problem: " $ ProblemDescription, "TroubleshootingReport");
+    LogDebug("Session Duration: " $ (class'WorldInfo'.static.GetWorldInfo().TimeSeconds - CDO.SessionStartTime) $ "s", "TroubleshootingReport");
 
     // Recent performance metrics
-    LogInfo("Recent Performance Metrics:", "TroubleshootingReport");
+    LogDebug("Recent Performance Metrics:", "TroubleshootingReport");
     for (i = Max(0, CDO.PerformanceHistory.Length - 5); i < CDO.PerformanceHistory.Length; i++)
     {
         Report = "  " $ CDO.PerformanceHistory[i].OperationName $ ": " $
                  CDO.PerformanceHistory[i].Duration $ "s";
-        LogInfo(Report, "TroubleshootingReport");
+        LogDebug(Report, "TroubleshootingReport");
     }
 
     // Recent log entries
-    LogInfo("Recent Log Entries:", "TroubleshootingReport");
+    LogDebug("Recent Log Entries:", "TroubleshootingReport");
     for (i = Max(0, CDO.RecentLogEntries.Length - 10); i < CDO.RecentLogEntries.Length; i++)
     {
-        LogInfo("  " $ CDO.RecentLogEntries[i], "TroubleshootingReport");
+        LogDebug("  " $ CDO.RecentLogEntries[i], "TroubleshootingReport");
     }
 
-    LogInfo("=== END TROUBLESHOOTING REPORT ===", "TroubleshootingReport");
+    LogDebugBlock("=== END TROUBLESHOOTING REPORT ===", "TroubleshootingReport");
 }
 
 // Mod conflict detection and warning system
@@ -384,7 +491,7 @@ static function LogModCompatibilityReport(array<string> DetectedMods, array<stri
     }
     else
     {
-        LogInfo("No conflicting legacy template mods detected", "ModCompatibility");
+        LogDebug("No conflicting legacy template mods detected", "ModCompatibility");
     }
 
     LogWarning("=== END MOD COMPATIBILITY REPORT ===", "ModCompatibility");
@@ -404,19 +511,30 @@ static function LogConflictResolutionGuidance()
 // Utility methods - Now reads from TM_ConfigManager instead of own config
 static function bool ShouldLog(ELogLevel Level)
 {
+    local ELogLevel ConfiguredLevel;
+
     // Get logging settings from ConfigManager instead of own config variables
-    return true && (Level <= class'TM_ConfigManager'.static.GetLogLevel());
+    ConfiguredLevel = class'TM_ConfigManager'.static.GetLogLevel();
+
+    // If configured level is None, don't log anything
+    if (ConfiguredLevel == ELL_None) return false;
+
+    // If the message level is None, never log it (shouldn't happen)
+    if (Level == ELL_None) return false;
+
+    // Log if message level is less than or equal to configured level
+    return (Level <= ConfiguredLevel);
 }
 
 static function string GetLogLevelString(ELogLevel Level)
 {
     switch (Level)
     {
+        case ELL_None:    return "NONE";
         case ELL_Error:   return "ERROR";
         case ELL_Warning: return "WARN";
         case ELL_Info:    return "INFO";
         case ELL_Debug:   return "DEBUG";
-        case ELL_Verbose: return "VERBOSE";
         default:          return "UNKNOWN";
     }
 }

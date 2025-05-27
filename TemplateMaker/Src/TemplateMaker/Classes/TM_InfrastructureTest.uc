@@ -17,15 +17,29 @@ struct TestResult
     var float ExecutionTime;
 };
 
+// Runtime state tracking
+var bool bTestsAlreadyRun; // Prevent duplicate test runs
+
 // Run all infrastructure tests
 static function array<TestResult> RunAllTests()
 {
     local array<TestResult> Results;
     local float StartTime, EndTime;
+    local TM_InfrastructureTest CDO;
+
+    CDO = TM_InfrastructureTest(class'XComEngine'.static.GetClassDefaultObject(class'TM_InfrastructureTest'));
+    if (CDO == none) return Results;
+
+    // Prevent duplicate test runs - only run once per session
+    if (CDO.bTestsAlreadyRun)
+    {
+        class'TM_Logger'.static.LogInfo("Infrastructure tests already completed this session", "InfrastructureTest");
+        return Results;
+    }
 
     StartTime = class'WorldInfo'.static.GetWorldInfo().TimeSeconds;
 
-    class'TM_Logger'.static.LogInfo("=== STARTING INFRASTRUCTURE TESTS ===", "InfrastructureTest");
+    class'TM_Logger'.static.LogInfoBlock("=== STARTING INFRASTRUCTURE TESTS ===", "InfrastructureTest");
 
     // Core system tests
     Results.AddItem(TestLoggerSystem());
@@ -45,7 +59,10 @@ static function array<TestResult> RunAllTests()
     // Log test summary
     LogTestSummary(Results, EndTime - StartTime);
 
-    class'TM_Logger'.static.LogInfo("=== INFRASTRUCTURE TESTS COMPLETED ===", "InfrastructureTest");
+    class'TM_Logger'.static.LogInfoBlock("=== INFRASTRUCTURE TESTS COMPLETED ===", "InfrastructureTest");
+
+    // Mark tests as completed to prevent duplicates
+    CDO.bTestsAlreadyRun = true;
 
     return Results;
 }
